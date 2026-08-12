@@ -77,14 +77,25 @@ the ceiling for the shared chain.
 The switch's computer-side inputs are USB-A. It includes two USB-A to USB-A
 cables, which covers the OMEN leg; the dock leg needs a USB-C to USB-A cable.
 
-### 2.3 Travel router runs in Client/Bridge mode
+### 2.3 Travel router runs in Client mode
 
-Router mode would put the cart behind NAT on its own subnet. AirPlay and
-HomeKit discovery use mDNS, which does not cross NAT, so nothing on the house
-network would find the Apple TV.
+The TL-WR3002X offers seven working modes. Only two bridge:
 
-In Client/Bridge mode, cart devices get IP addresses from the house router and
-sit on one flat subnet.
+| Mode | Behaviour | Use it? |
+|---|---|---|
+| Client | Wi-Fi to Ethernet bridge, no NAT | Yes |
+| Range Extender | Repeats Wi-Fi, bridges the LAN port | Fallback |
+| Access Point | Needs a wired uplink | No — there is none |
+| Hotspot / WISP | Joins existing Wi-Fi, adds NAT | **No** |
+| Router, USB tethering, 3G/4G | NAT | No |
+
+In Client mode, cart devices get IP addresses from the house router and sit on
+one flat subnet.
+
+**Hotspot mode is the likely mistake.** It also joins the house Wi-Fi, and
+everything appears to work: the cart reaches the internet and the house. But it
+adds NAT, mDNS does not cross NAT, and AirPlay to the Apple TV fails from every
+phone in the house while nothing else looks wrong.
 
 **Accepted limitation:** all cart traffic shares a single Wi-Fi uplink.
 
@@ -252,7 +263,7 @@ Each item must be checked. The first two should be checked before ordering.
 | # | Risk | Check | Fallback |
 |---|---|---|---|
 | 1 | The cart's work-surface edge may not accept a C-clamp. Both arms depend on it, and VIVO does not publish the edge profile. | Measure edge thickness and confirm no frame lip within 2" of the edge. | Different cart, or move the monitor to its own stand. |
-| 2 | The TL-WR3002X may not bridge its Ethernet port onto the host subnet in every mode. | Plug a laptop into its LAN port and confirm it receives a house-router IP. | Try Extender mode. Worst case, accept NAT and lose AirPlay from house devices. |
+| 2 | The TL-WR3002X may not bridge its Ethernet port onto the host subnet. TP-Link documents the mode list but not per-mode NAT or port behaviour. | Set Client mode, plug a laptop into the LAN port, confirm it gets a house-router address. | Try Range Extender mode. Do not settle for Hotspot/WISP — it adds NAT and loses AirPlay. |
 | 3 | Windows laptops vary in USB-C DisplayPort Alt Mode and PD support. | Test each laptop before relying on the one-cable path. | Use the laptop's own charger and HDMI port, plus the UE306 adapter. |
 | 4 | Chaining the dock hub into the USB switch adds a second hub tier. | Test the keyboard, mouse, and any shared device before permanent mounting. | Connect shared USB directly to the dock and switch manually. |
 | 5 | Heat buildup from the OMEN and dock on the lower platform. | Leave clearance around the tower and check temperatures under load. | Reposition components or add spacing. |
