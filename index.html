@@ -9,7 +9,7 @@
 <style>
 :root{
   --bg:#f6f7f9;--card:#fff;--ink:#16181d;--muted:#69707d;--line:#dfe3e8;
-  --accent:#1f6feb;--good:#14804a;--warn:#9a6200;--shadow:0 8px 24px rgba(20,24,32,.08);
+  --accent:#1f6feb;--good:#14804a;--warn:#9a6200;--conn:#9aa3b0;--shadow:0 8px 24px rgba(20,24,32,.08);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -65,37 +65,80 @@ tr:last-child td{border-bottom:0}
 tfoot td{font-weight:800;border-top:2px solid var(--line);border-bottom:0}
 .tbl-scroll{overflow-x:auto;min-width:0}
 
-/* Compact diagrams: branching remains visible on phones without page overflow */
-.flowchart{display:flex;flex-direction:column;gap:10px;width:100%;min-width:0;padding:6px 0}
-.fc-node{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 9px;text-align:center;box-shadow:0 3px 10px rgba(20,24,32,.05);font-weight:750;font-size:13px;line-height:1.3;min-width:0;overflow-wrap:anywhere}
-.fc-node small{display:block;color:var(--muted);font-weight:500;margin-top:3px;font-size:11.5px;line-height:1.35}
-.fc-accent{border-color:#9cc2ff;background:#f4f8ff}
-.fc-power{border-color:#e5b75b;background:#fff9eb}
-.fc-media{border-color:#c7b7ff;background:#faf8ff}
-.fc-line{height:16px;width:2px;background:#aab2bd;margin:0 auto}
-.fc-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:800;text-align:center}
-.fc-arrow{font-size:18px;color:#7a8493;text-align:center}
-.fc-row{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:5px;width:100%;min-width:0}
-.fc-split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;width:100%;min-width:0}
-.fc-branch{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;width:100%;min-width:0}
-.fc-branch.four{grid-template-columns:repeat(2,minmax(0,1fr))}
-.diagram-key{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:6px;font-size:10.5px;color:var(--muted);text-align:center}
+/* Diagrams: real tree connectors. Every line joins two specific nodes. */
+.tree{display:flex;flex-direction:column;width:100%;min-width:0;padding:4px 0}
+.node{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 9px;text-align:center;box-shadow:0 3px 10px rgba(20,24,32,.05);font-weight:750;font-size:13px;line-height:1.3;min-width:0;overflow-wrap:anywhere}
+.node small{display:block;color:var(--muted);font-weight:500;margin-top:3px;font-size:11.5px;line-height:1.35}
+.node.accent{border-color:#9cc2ff;background:#f4f8ff}
+.node.power{border-color:#e5b75b;background:#fff9eb}
+.node.media{border-color:#c7b7ff;background:#faf8ff}
+.link{height:18px;width:2px;background:var(--conn);margin:0 auto;flex:0 0 auto}
+/* Dashed means wireless, solid means a physical cable. */
+.link.wifi{height:26px;width:0;background:none;border-left:2px dashed var(--conn);position:relative}
+.link.wifi span{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800;white-space:nowrap}
+.fc-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:800;text-align:center;padding:8px 0 4px}
+.fc-row{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:8px;width:100%;min-width:0}
+.arrow{font-size:18px;color:#7a8493;text-align:center;line-height:1}
+.col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.grp{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:800;text-align:center}
+
+/* Fan-out: one parent above, N children below, joined by a rail. */
+.fan{--n:3;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:8px;align-items:start;position:relative;padding-top:26px;width:100%;min-width:0}
+.fan.in{align-items:end}
+.fan>*{position:relative;min-width:0}
+.fan::before{content:"";position:absolute;left:50%;top:0;width:2px;height:13px;background:var(--conn);transform:translateX(-1px)}
+.fan::after{content:"";position:absolute;top:13px;height:2px;background:var(--conn);left:calc(50% / var(--n));right:calc(50% / var(--n))}
+.fan>*::before{content:"";position:absolute;left:50%;top:-13px;width:2px;height:13px;background:var(--conn);transform:translateX(-1px)}
+/* Fan-in: N children above converging into one parent below. */
+.fan.in{padding-top:0;padding-bottom:26px}
+.fan.in::before{top:auto;bottom:0}
+.fan.in::after{top:auto;bottom:13px}
+.fan.in>*::before{top:auto;bottom:-13px}
+
+.diagram-key{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--muted)}
+.diagram-key span{display:inline-flex;align-items:center;gap:5px}
+.swatch{width:11px;height:11px;border-radius:3px;border:1px solid var(--line);display:inline-block}
+.swatch.accent{border-color:#9cc2ff;background:#f4f8ff}
+.swatch.power{border-color:#e5b75b;background:#fff9eb}
+.swatch.media{border-color:#c7b7ff;background:#faf8ff}
+.diagram-key i.dash,.diagram-key i.solid{width:16px;height:0;display:inline-block}
+.diagram-key i.dash{border-top:2px dashed var(--conn)}
+.diagram-key i.solid{border-top:2px solid var(--conn)}
 footer{color:var(--muted);font-size:12px;margin-top:18px;text-align:center;line-height:1.5}
+
+/* Phones: fans become a left spine, which reads better in one column. */
+@media(max-width:639px){
+  .fan{grid-template-columns:1fr;padding-top:14px;padding-left:20px}
+  .fan::after{display:none}
+  .fan::before{left:10px;height:14px}
+  .fan>*::before{left:-10px;top:50%;width:10px;height:2px;transform:none}
+  .fan>*::after{content:"";position:absolute;left:-10px;top:-4px;bottom:-4px;width:2px;background:var(--conn)}
+  .fan>*:first-child::after{top:0}
+  .fan>*:last-child::after{bottom:50%}
+  .fan.in{padding-top:0;padding-bottom:14px;padding-left:20px}
+  .fan.in::before{top:auto;bottom:0;height:14px}
+  .fan.in>*::before{top:50%;bottom:auto}
+  .fan.in>*:first-child::after{top:50%;bottom:-4px}
+  .fan.in>*:last-child::after{top:-4px;bottom:0}
+  .fc-row{grid-template-columns:1fr;gap:4px}
+  .fc-row .arrow{transform:rotate(90deg)}
+}
 
 @media(min-width:520px){
   .wrap{padding:24px 18px 48px}
   .hero{padding:24px}
-  .fc-branch.four{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 @media(min-width:800px){
   .component-grid{grid-template-columns:1fr 1fr}
   .grid.even{grid-template-columns:1fr 1fr}
+  .gloss{columns:2;column-gap:26px}
+  .gloss p{break-inside:avoid}
 }
 @media(min-width:1000px){
   .wrap{padding:32px 20px 60px}
   .card{padding:20px}
-  .fc-node{font-size:14px;padding:12px}
-  .fc-node small{font-size:12px}
+  .node{font-size:14px;padding:12px}
+  .node small{font-size:12px}
 }
 @media(min-width:1140px){
   .component-grid{grid-template-columns:repeat(3,1fr)}
@@ -192,7 +235,7 @@ a.product-link.image-link:hover img{opacity:.88}
 <p class="lead">Accessories and installation pieces still to finalize.</p>
 <div class="items">
 <div class="item"><div><h3>8-Outlet Mountable Power Strip</h3><div class="small">Mounts to the stationary lower column and feeds all seven on-board loads. Needs a 14&nbsp;AWG cord and a 15&nbsp;A rating. White preferred.</div></div><span class="price-tag">~$25</span></div>
-<div class="item"><div><h3>Cables</h3><div class="small">DisplayPort 1.4, two HDMI 2.1, three short Cat6, a full-featured USB-C host cable, a USB-B cable for the switch, spiral wrap, and cable anchors.</div></div><span class="price-tag">~$85</span></div>
+<div class="item"><div><h3>Cables</h3><div class="small">DisplayPort 1.4, two HDMI 2.1, four short Cat6, a USB-C to USB-B, a USB-A to USB-B, a USB-B, spiral wrap, and cable anchors. See the wiring table for the full count.</div></div><span class="price-tag">~$85</span></div>
 <div class="item"><div><h3>Mounting hardware</h3><div class="small">Brackets, straps, and fasteners for the strip, router, switch, and dock. White or clear where practical.</div></div><span class="price-tag">~$25</span></div>
 <div class="item"><div><h3><a class="product-link" href="https://www.amazon.com/s?k=TP-Link+UE306" rel="noopener noreferrer" target="_blank">TP-Link UE306 USB 3.0 → Gigabit Ethernet</a></h3><div class="small">Optional. Fallback for Windows laptops whose USB-C ports prove unreliable.</div></div><span class="tag tbd">Optional</span></div>
 </div>
@@ -212,37 +255,110 @@ a.product-link.image-link:hover img{opacity:.88}
 </section>
 
 <section class="grid even" id="architecture">
-<div class="card"><h2>Network architecture</h2><div class="flowchart"><div class="fc-row"><div class="fc-node fc-accent">House Wi‑Fi<small>Router and DHCP live here</small></div><div class="fc-arrow">→</div><div class="fc-node fc-accent">TL-WR3002X<small>Client/Bridge mode — no NAT</small></div></div><div class="fc-line"></div><div class="fc-node">TL-SG105<small>5-port gigabit cart switch</small></div><div class="fc-label">Wired clients — all on the house subnet</div><div class="fc-branch"><div class="fc-node">HP OMEN<small>Direct Ethernet</small></div><div class="fc-node fc-media">Apple TV<small>AirPlay reachable from the house</small></div><div class="fc-node">Anker Nano Dock<small>Ethernet for the laptop</small></div></div><div class="fc-line"></div><div class="fc-node fc-accent">Guest Laptop<small>Network arrives over its single USB‑C connection</small></div></div>
+<div class="card"><h2>Network architecture</h2>
+<div class="tree">
+<div class="node accent">House Wi‑Fi<small>Router and DHCP live here</small></div>
+<div class="link wifi"><span>Wi‑Fi uplink</span></div>
+<div class="node accent">TL-WR3002X<small>Client/Bridge mode — no NAT</small></div>
+<div class="link"></div>
+<div class="node">TL-SG105<small>5-port gigabit cart switch</small></div>
+<div class="fan" style="--n:3">
+<div class="node">HP OMEN<small>Cat6 to port 1</small></div>
+<div class="node media">Apple TV<small>Cat6 to port 2 · AirPlay reachable from the house</small></div>
+<div class="col">
+<div class="node">Anker Nano Dock<small>Cat6 to port 3</small></div>
+<div class="link"></div>
+<div class="node accent">Guest Laptop<small>Network arrives over the dock's USB‑C cable</small></div>
+</div>
+</div>
+</div>
+<div class="diagram-key"><span><i class="swatch accent"></i>Network</span><span><i class="swatch media"></i>Media</span><span><i class="dash"></i>Wireless</span><span><i class="solid"></i>Cable</span></div>
 <div class="warn" style="margin-top:12px">Bridge mode is what makes AirPlay work. In Router mode the cart sits behind NAT, and mDNS discovery does not cross NAT — no phone in the house would find the Apple TV.</div>
 </div>
 
-<div class="card"><h2>Video + control architecture</h2><div class="flowchart"><div class="fc-label">Three sources, three native monitor inputs</div><div class="fc-branch"><div class="fc-node">HP OMEN<small>DisplayPort 1.4</small></div><div class="fc-node">Guest Laptop<small>USB‑C → dock → HDMI 2.1</small></div><div class="fc-node fc-media">Apple TV<small>HDMI 2.1</small></div></div><div class="fc-line"></div><div class="fc-node fc-accent">LG 32GX850A-B<small>32-inch 4K OLED · switch inputs with the monitor button</small></div><div class="fc-label">USB control is independent of video</div><div class="fc-split"><div class="fc-node">HP OMEN USB</div><div class="fc-node">Anker Nano Dock USB<small>10 Gbps port</small></div></div><div class="fc-line"></div><div class="fc-node fc-accent">UGREEN USB Switch<small>Keyboard dongle · shared USB</small></div></div>
+<div class="card"><h2>Video architecture</h2>
+<div class="tree">
+<div class="fc-label" style="padding-top:0">Three sources, three native monitor inputs</div>
+<div class="fan in" style="--n:3">
+<div class="node">HP OMEN<small>DisplayPort 1.4 · 4K at 165&nbsp;Hz</small></div>
+<div class="node">Guest Laptop<small>USB‑C → dock → HDMI 1</small></div>
+<div class="node media">Apple TV<small>HDMI 2</small></div>
+</div>
+<div class="node accent">LG 32GX850A-B<small>Select the source with the monitor's input button</small></div>
+</div>
 <div class="note" style="margin-top:12px">No HDMI switch. Routing this panel through a 4K-at-60-Hz switch would have cost 105&nbsp;Hz of refresh and probably G-Sync, to solve a problem the monitor's three inputs already solve.</div>
 </div>
 </section>
 
 <section class="grid even">
-<div class="card"><h2>Power architecture</h2>
-<div class="flowchart">
-<div class="fc-node fc-power">Wall AC<small>One cord — the only thing to unplug</small></div>
-<div class="fc-line"></div>
-<div class="fc-node fc-power">8-Outlet Mountable Strip<small>Stationary lower column · 14 AWG · ~770W peak</small></div>
-<div class="fc-label">All seven on-board loads</div>
-<div class="fc-branch four">
-<div class="fc-node">HP OMEN<small>RTX 4070 tower</small></div>
-<div class="fc-node">LG Monitor</div>
-<div class="fc-node">Anker Dock<small>140W brick</small></div>
-<div class="fc-node">Cart Lift Motor<small>Moves with the cart</small></div>
+<div class="card"><h2>USB control</h2>
+<div class="tree">
+<div class="fc-label" style="padding-top:0">Either computer can own the peripherals</div>
+<div class="fan in" style="--n:2">
+<div class="node">HP OMEN<small>USB-A to the switch</small></div>
+<div class="node">Anker Nano Dock<small>10&nbsp;Gbps USB-C port to the switch</small></div>
 </div>
-<div class="fc-branch" style="margin-top:6px">
-<div class="fc-node">TL-WR3002X</div>
-<div class="fc-node">TL-SG105</div>
-<div class="fc-node fc-media">Apple TV 4K</div>
+<div class="node accent">UGREEN USB Switch<small>One button moves everything below</small></div>
+<div class="fan" style="--n:2">
+<div class="node">Keyboard + mouse<small>2.4&nbsp;GHz dongle</small></div>
+<div class="node">Monitor USB hub<small>Adds two reachable USB-A ports</small></div>
 </div>
 </div>
-<div class="note" style="margin-top:12px">No UPS. It would have taken $200 of a $1,000 budget and added about 20&nbsp;lb to a cart that gets moved daily. The accepted trade is that a power cut drops the desktop uncleanly.</div>
+<div class="note" style="margin-top:12px">This chain is fully independent of video. Switching the monitor's input does not move the keyboard, and switching USB does not change what is on screen. Two deliberate actions, not one.</div>
 </div>
 
+<div class="card"><h2>Power architecture</h2>
+<div class="tree">
+<div class="node power">Wall AC<small>One cord — the only thing to unplug</small></div>
+<div class="link"></div>
+<div class="node power">8-Outlet Mountable Strip<small>Stationary lower column · 14 AWG · ~770&nbsp;W peak</small></div>
+<div class="fan" style="--n:4">
+<div class="col"><div class="grp">Desktop</div><div class="node">HP OMEN<small>RTX 4070 tower</small></div><div class="node">LG Monitor</div></div>
+<div class="col"><div class="grp">Laptop</div><div class="node">Anker Dock<small>140&nbsp;W brick</small></div></div>
+<div class="col"><div class="grp">Network</div><div class="node">TL-WR3002X</div><div class="node">TL-SG105</div></div>
+<div class="col"><div class="grp">Other</div><div class="node media">Apple TV 4K</div><div class="node">Lift motor<small>Moves with the cart</small></div></div>
+</div>
+</div>
+<div class="note" style="margin-top:12px">Seven loads, one strip, one cord. No UPS — it would have taken $200 of a $1,000 budget and added about 20&nbsp;lb to a cart that gets moved daily. The accepted trade is that a power cut drops the desktop uncleanly.</div>
+</div>
+</section>
+
+<section style="margin-top:18px">
+<div class="card">
+<h2>Wiring table</h2>
+<p class="lead">Every connection on the cart. Build from this, not from the diagrams.</p>
+<div class="tbl-scroll">
+<table>
+<thead><tr><th>From</th><th>To</th><th>Cable</th></tr></thead>
+<tbody>
+<tr><td colspan="3" class="grp" style="text-align:left;padding-top:14px">Video</td></tr>
+<tr><td>HP OMEN — DisplayPort out</td><td>Monitor — DisplayPort in</td><td>DisplayPort 1.4</td></tr>
+<tr><td>Anker dock — HDMI out</td><td>Monitor — HDMI 1</td><td>HDMI 2.1</td></tr>
+<tr><td>Apple TV — HDMI out</td><td>Monitor — HDMI 2</td><td>HDMI 2.1</td></tr>
+<tr><td colspan="3" class="grp" style="text-align:left;padding-top:14px">Network</td></tr>
+<tr><td>TL-WR3002X — LAN</td><td>TL-SG105 — port 5</td><td>Cat6</td></tr>
+<tr><td>HP OMEN — Ethernet</td><td>TL-SG105 — port 1</td><td>Cat6</td></tr>
+<tr><td>Apple TV — Ethernet</td><td>TL-SG105 — port 2</td><td>Cat6</td></tr>
+<tr><td>Anker dock — Ethernet</td><td>TL-SG105 — port 3</td><td>Cat6</td></tr>
+<tr><td colspan="3" class="grp" style="text-align:left;padding-top:14px">USB</td></tr>
+<tr><td>Guest laptop</td><td>Anker dock — USB-C upstream</td><td>USB-C <em>(ships with dock)</em></td></tr>
+<tr><td>HP OMEN — USB-A</td><td>UGREEN switch — computer 1</td><td>USB-A to USB-B</td></tr>
+<tr><td>Anker dock — USB-C 10&nbsp;Gbps</td><td>UGREEN switch — computer 2</td><td>USB-C to USB-B</td></tr>
+<tr><td>Keyboard/mouse dongle</td><td>UGREEN switch — device 1</td><td>—</td></tr>
+<tr><td>Monitor — USB-B upstream</td><td>UGREEN switch — device 2</td><td>USB-B</td></tr>
+<tr><td colspan="3" class="grp" style="text-align:left;padding-top:14px">Power — all to the 8-outlet strip</td></tr>
+<tr><td>HP OMEN · Monitor · Anker dock brick</td><td>Strip</td><td>Stock cords</td></tr>
+<tr><td>TL-WR3002X · TL-SG105 · Apple TV</td><td>Strip</td><td>Stock adapters</td></tr>
+<tr><td>Cart lift motor</td><td>Strip</td><td>Stock cord</td></tr>
+<tr><td>Strip</td><td>Wall outlet</td><td>14 AWG, the only cord to unplug</td></tr>
+</tbody>
+</table>
+</div>
+<div class="note" style="margin-top:14px"><strong>Cable count:</strong> 1 × DisplayPort 1.4 · 2 × HDMI 2.1 · 4 × short Cat6 · 1 × USB-A to USB-B · 1 × USB-C to USB-B · 1 × USB-B · plus spiral wrap and anchors. The dock's own USB-C upstream cable is in the box.</div>
+</div>
+</section>
+
+<section class="grid even">
 <div class="card">
 <h2>Stability and mounting</h2>
 <p class="lead">Capacity is not the problem. Tipping is.</p>
@@ -268,9 +384,7 @@ a.product-link.image-link:hover img{opacity:.88}
 <div class="check"><span class="dot">✓</span><div><strong>Leave slack at the joint</strong><div class="small">The column travels about 25.5&nbsp;inches. Cables crossing it need roughly 30&nbsp;inches of service loop in spiral wrap. Mount the strip, router, switch, and dock to the stationary lower section so only the arm cables cross.</div></div></div>
 </div>
 </div>
-</section>
 
-<section class="grid even">
 <div class="card">
 <h2>Laptop connection</h2>
 <div class="checks">
@@ -280,15 +394,19 @@ a.product-link.image-link:hover img{opacity:.88}
 <div class="check"><span class="dot">✓</span><div><strong>Gigabit Ethernet</strong><div class="small">Through the dock's built-in port, on the house subnet.</div></div></div>
 </div>
 </div>
+</section>
 
+<section style="margin-top:18px">
 <div class="card">
 <h2>Quick glossary</h2>
+<div class="gloss">
 <p class="small" style="font-size:14px;line-height:1.6;margin-top:0"><strong>Bridge mode:</strong> A router setting that passes devices through to the existing network instead of creating a second, separate one.</p>
 <p class="small" style="font-size:14px;line-height:1.6"><strong>mDNS:</strong> The discovery protocol behind AirPlay and HomeKit. It does not cross between networks, which is why bridge mode matters here.</p>
 <p class="small" style="font-size:14px;line-height:1.6"><strong>USB switch:</strong> A selector that moves shared USB devices such as the keyboard dongle between two computers, without touching video.</p>
 <p class="small" style="font-size:14px;line-height:1.6"><strong>PD:</strong> USB Power Delivery, the standard used to charge the laptop over USB-C.</p>
 <p class="small" style="font-size:14px;line-height:1.6"><strong>G-Sync:</strong> Syncs the monitor's refresh rate to the graphics card to remove tearing. Video switches often break it.</p>
 <p class="small" style="font-size:14px;line-height:1.6"><strong>PoE:</strong> Power over Ethernet. Lets a network device draw power from its data cable. Not used in this build.</p>
+</div>
 </div>
 </section>
 
