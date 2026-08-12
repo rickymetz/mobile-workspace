@@ -165,11 +165,27 @@ edge at heights up to 51".
 | UGREEN USB 3.0 sharing switch | $45.99 |
 | TP-Link TL-SG105 gigabit switch | ~$16.99 |
 | 8-outlet mountable power strip, 14 AWG | ~$25 |
-| Cables — DP 1.4, 2× HDMI 2.1, 3× Cat6, USB-C host, USB-B, spiral wrap | ~$85 |
+| Cables — see the cable count below | ~$85 |
 | Mounting hardware | ~$25 |
 | **Total** | **~$637** |
 
 Roughly $360 under the ceiling.
+
+### Cable count
+
+Derived from the wiring table in `index.html`.
+
+| Cable | Qty |
+|---|---|
+| DisplayPort 1.4 | 1 |
+| HDMI 2.1 | 2 |
+| Cat6, short | 4 |
+| USB-A to USB-B | 1 |
+| USB-C to USB-B | 1 |
+| USB-B | 1 |
+| Spiral wrap and anchors | — |
+
+The dock's USB-C upstream cable ships in the box.
 
 ### Optional
 
@@ -231,5 +247,7 @@ Each item must be checked. The first two should be checked before ordering.
 
 ## 6. Deliverables
 
-1. `index.html` — the one-page build sheet, revised to match this spec.
+1. `index.html` — the one-page build sheet, revised to match this spec. It
+   carries the diagrams and the wiring table, which is the connection-by-
+   connection reference to build from.
 2. This document.
