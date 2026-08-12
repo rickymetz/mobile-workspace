@@ -19,7 +19,7 @@ network connection, and one power cord.
 | Laptops supported | Apple Silicon MacBook Air/Pro 13–14", assorted Windows laptops. |
 | Uplink | Wi-Fi only. No Ethernet drop is possible in the room. |
 | Power protection | None. No UPS. |
-| Budget | ~$1,000 for everything not already owned. |
+| Budget | ~$1,000 for everything not already owned. Tracked at list price. |
 
 ### Already owned
 
@@ -158,20 +158,27 @@ edge at heights up to 51".
 
 ### To buy
 
-| Item | Price |
-|---|---|
-| VIVO DESK-V111VTW cart | $219.99 |
-| Anker Nano Docking Station A83C3 | $149.99 |
-| TP-Link TL-WR3002X travel router | $68.99 |
-| UGREEN USB 3.0 sharing switch | $45.99 |
-| TP-Link TL-SG105 gigabit switch | ~$12 |
-| 8-outlet mountable power strip, 14 AWG | ~$25 |
-| Cables — see the cable count below | ~$85 |
-| Mounting hardware | ~$25 |
-| **Total** | **~$632** |
+Prices are manufacturer list as of 11 Aug 2026 — a ceiling, not what you
+will pay.
 
-Roughly $370 under the ceiling. Prices checked 11 Aug 2026; Anker and
-UGREEN confirmed against the manufacturer, the rest are street prices.
+| Item | List | Seen at |
+|---|---|---|
+| VIVO DESK-V111VTW cart | $299.99 | $219.99 |
+| Anker Nano Docking Station A83C3 | $187.99 | $149.99 |
+| TP-Link TL-WR3002X travel router | $99.99 | $68.99 |
+| UGREEN USB 3.0 sharing switch | $45.99 | $45.99 |
+| TP-Link TL-SG105 gigabit switch | $19.99 | ~$12 |
+| 8-outlet mountable power strip, 14 AWG | ~$25 | — |
+| Cables — see the cable count below | ~$85 | — |
+| Mounting hardware | ~$25 | — |
+| **Total** | **~$789** | **~$632** |
+
+At list the build is roughly $210 under the ceiling; at street prices,
+roughly $370 under.
+
+VIVO, Anker, and UGREEN list prices come from the manufacturers. TP-Link
+does not publish list prices, so the router, switch, and adapter use retail
+list.
 
 ### Cable count
 
@@ -192,7 +199,7 @@ ship in their boxes. The dock-to-switch cable depends on risk 6 below.
 
 | Item | Price | Note |
 |---|---|---|
-| TP-Link UE306 USB 3.0 to Gigabit Ethernet | ~$16.99 | Fallback for Windows laptops with unreliable USB-C. |
+| TP-Link UE306 USB 3.0 to Gigabit Ethernet | $16.99 list | Fallback for Windows laptops with unreliable USB-C. |
 
 ### Cut from the original plan
 
