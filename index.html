@@ -71,6 +71,8 @@ td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 tr:last-child td{border-bottom:0}
 tfoot td{font-weight:800;border-top:2px solid var(--line);border-bottom:0}
 .tbl-scroll{overflow-x:auto;min-width:0}
+/* section rows read as dividers, distinct from the column headers above */
+.wire th[scope="colgroup"]{font-size:11px;letter-spacing:.08em;color:var(--ink);padding-top:18px}
 
 /* Diagrams: real tree connectors. Every line joins two specific nodes. */
 .tree{display:flex;flex-direction:column;width:100%;min-width:0;padding:4px 0}
@@ -123,7 +125,9 @@ footer{color:var(--muted);font-size:12px;margin-top:18px;text-align:center;line-
 
 /* Phones: fans scroll sideways with snap points, one child at a time. */
 .fan-wrap{min-width:0}
-.swipe{display:none;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:800;text-align:center;padding-top:8px}
+/* Captions label content and stay uppercase; hints are chrome and step down
+   to sentence case at regular weight. Colour is unchanged so contrast holds. */
+.swipe{display:none;font-size:11.5px;text-transform:none;letter-spacing:0;color:var(--muted);font-weight:500;font-style:italic;text-align:center;padding-top:9px}
 @media(max-width:639px){
   .fan-wrap{
     overflow-x:auto;
@@ -215,7 +219,6 @@ a.product-link.image-link:hover img{opacity:.88}
   .wire td+td{margin-top:7px}
   .wire th[scope="colgroup"]{
     display:block;padding:16px 0 4px;border-bottom:0;
-    font-size:11px;letter-spacing:.08em;color:var(--ink);
   }
   .wire tr:has(th[scope="colgroup"]){border-bottom:0;padding-bottom:0}
 }
