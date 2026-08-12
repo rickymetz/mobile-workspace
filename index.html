@@ -91,15 +91,17 @@ tfoot td{font-weight:800;border-top:2px solid var(--line);border-bottom:0}
 .fc-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:800;text-align:center;padding:8px 0 4px}
 .fc-row{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:8px;width:100%;min-width:0}
 .arrow{font-size:18px;color:#7a8493;text-align:center;line-height:1}
-.col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.col{--cg:8px;display:flex;flex-direction:column;gap:var(--cg);min-width:0}
+.col>.link{margin:calc(-1 * var(--cg)) auto}
 .grp{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:800;text-align:center}
 
 /* Fan-out: one parent above, N children below, joined by a rail. */
-.fan{--n:3;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:8px;align-items:start;position:relative;padding-top:26px;width:100%;min-width:0}
+.fan{--n:3;--g:8px;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:var(--g);align-items:start;position:relative;padding-top:26px;width:100%;min-width:0}
 .fan.in{align-items:end}
 .fan>*{position:relative;min-width:0}
 .fan::before{content:"";position:absolute;left:50%;top:0;width:2px;height:13px;background:var(--conn);transform:translateX(-1px)}
-.fan::after{content:"";position:absolute;top:13px;height:2px;background:var(--conn);left:calc(50% / var(--n));right:calc(50% / var(--n))}
+/* half a column in, gaps included, so the rail meets the outer drops */
+.fan::after{content:"";position:absolute;top:13px;height:2px;background:var(--conn);left:calc((100% - (var(--n) - 1) * var(--g)) / var(--n) / 2);right:calc((100% - (var(--n) - 1) * var(--g)) / var(--n) / 2)}
 .fan>*::before{content:"";position:absolute;left:50%;top:-13px;width:2px;height:13px;background:var(--conn);transform:translateX(-1px)}
 /* Fan-in: N children above converging into one parent below. */
 .fan.in{padding-top:0;padding-bottom:26px}
