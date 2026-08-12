@@ -74,6 +74,9 @@ A83C3's two USB-A ports run at 480 Mbps. Using one would drop every shared
 device to USB 2.0 speed. The UGREEN switch itself runs at 5 Gbps, so that is
 the ceiling for the shared chain.
 
+The switch's computer-side inputs are USB-A. It includes two USB-A to USB-A
+cables, which covers the OMEN leg; the dock leg needs a USB-C to USB-A cable.
+
 ### 2.3 Travel router runs in Client/Bridge mode
 
 Router mode would put the cart behind NAT on its own subnet. AirPlay and
@@ -189,11 +192,14 @@ Derived from the wiring table in `index.html`.
 | DisplayPort 1.4 | 1 |
 | HDMI 2.1 | 2 |
 | Cat6, short | 4 |
+| USB-C to USB-A | 1 |
 | USB-B | 1 |
 | Spiral wrap and anchors | — |
 
-The dock's USB-C upstream cable and the switch's two computer-side cables
-ship in their boxes. The dock-to-switch cable depends on risk 6 below.
+The switch's computer-side ports are USB-A, and it ships with two USB-A to
+USB-A cables plus a wired remote. One of those covers the OMEN, so only the
+dock leg needs buying: USB-C on the dock to USB-A on the switch. The dock's
+USB-C upstream cable is in its box.
 
 ### Optional
 
@@ -250,7 +256,6 @@ Each item must be checked. The first two should be checked before ordering.
 | 3 | Windows laptops vary in USB-C DisplayPort Alt Mode and PD support. | Test each laptop before relying on the one-cable path. | Use the laptop's own charger and HDMI port, plus the UE306 adapter. |
 | 4 | Chaining the dock hub into the USB switch adds a second hub tier. | Test the keyboard, mouse, and any shared device before permanent mounting. | Connect shared USB directly to the dock and switch manually. |
 | 5 | Heat buildup from the OMEN and dock on the lower platform. | Leave clearance around the tower and check temperatures under load. | Reposition components or add spacing. |
-| 6 | The UGREEN switch's computer-side connector type is not published, and it decides the dock-to-switch cable. | Check the ports on arrival. The switch ships with two cables for its own inputs. | Buy the matching cable or adapter once the connector is known. |
 
 ---
 
