@@ -106,22 +106,32 @@ tfoot td{font-weight:800;border-top:2px solid var(--line);border-bottom:0}
 .diagram-key i.solid{border-top:2px solid var(--conn)}
 footer{color:var(--muted);font-size:12px;margin-top:18px;text-align:center;line-height:1.5}
 
-/* Phones: fans become a left spine, which reads better in one column. */
+/* Phones: fans scroll sideways with snap points, one child at a time. */
+.fan-wrap{min-width:0}
+.swipe{display:none;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:800;text-align:center;padding-top:8px}
 @media(max-width:639px){
-  .fan{grid-template-columns:1fr;padding-top:14px;padding-left:20px}
-  .fan::after{display:none}
-  .fan::before{left:10px;height:14px}
-  .fan>*::before{left:-10px;top:50%;width:10px;height:2px;transform:none}
-  .fan>*::after{content:"";position:absolute;left:-10px;top:-4px;bottom:-4px;width:2px;background:var(--conn)}
-  .fan>*:first-child::after{top:0}
-  .fan>*:last-child::after{bottom:50%}
-  .fan.in{padding-top:0;padding-bottom:14px;padding-left:20px}
-  .fan.in::before{top:auto;bottom:0;height:14px}
-  .fan.in>*::before{top:50%;bottom:auto}
-  .fan.in>*:first-child::after{top:50%;bottom:-4px}
-  .fan.in>*:last-child::after{top:-4px;bottom:0}
-  .fc-row{grid-template-columns:1fr;gap:4px}
-  .fc-row .arrow{transform:rotate(90deg)}
+  .fan-wrap{
+    overflow-x:auto;
+    overscroll-behavior-x:contain;
+    scroll-snap-type:x mandatory;
+    scroll-padding:0 12px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    border-radius:12px;
+  }
+  .fan-wrap::-webkit-scrollbar{display:none}
+  .fan-wrap:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .fan{
+    grid-template-columns:none;
+    grid-auto-flow:column;
+    grid-auto-columns:70vw;
+    width:max-content;
+    min-width:100%;
+  }
+  .fan>*{scroll-snap-align:center}
+  /* The stub meets the rail above the first child, which is where you start. */
+  .fan::before,.fan.in::before{left:calc(50% / var(--n))}
+  .swipe{display:block}
 }
 
 @media(min-width:520px){
@@ -262,7 +272,7 @@ a.product-link.image-link:hover img{opacity:.88}
 <div class="node accent">TL-WR3002X<small>Client/Bridge mode — no NAT</small></div>
 <div class="link"></div>
 <div class="node">TL-SG105<small>5-port gigabit cart switch</small></div>
-<div class="fan" style="--n:3">
+<div class="fan-wrap" tabindex="0"><div class="fan" style="--n:3">
 <div class="node">HP OMEN<small>Cat6 to port 1</small></div>
 <div class="node media">Apple TV<small>Cat6 to port 2 · AirPlay reachable from the house</small></div>
 <div class="col">
@@ -270,7 +280,8 @@ a.product-link.image-link:hover img{opacity:.88}
 <div class="link"></div>
 <div class="node accent">Guest Laptop<small>Network arrives over the dock's USB‑C cable</small></div>
 </div>
-</div>
+</div></div>
+<div class="swipe">Swipe for all 3 →</div>
 </div>
 <div class="diagram-key"><span><i class="swatch accent"></i>Network</span><span><i class="swatch media"></i>Media</span><span><i class="dash"></i>Wireless</span><span><i class="solid"></i>Cable</span></div>
 <div class="warn" style="margin-top:12px">Bridge mode is what makes AirPlay work. In Router mode the cart sits behind NAT, and mDNS discovery does not cross NAT — no phone in the house would find the Apple TV.</div>
@@ -279,11 +290,12 @@ a.product-link.image-link:hover img{opacity:.88}
 <div class="card"><h2>Video architecture</h2>
 <div class="tree">
 <div class="fc-label" style="padding-top:0">Three sources, three native monitor inputs</div>
-<div class="fan in" style="--n:3">
+<div class="fan-wrap" tabindex="0"><div class="fan in" style="--n:3">
 <div class="node">HP OMEN<small>DisplayPort 1.4 · 4K at 165&nbsp;Hz</small></div>
 <div class="node">Guest Laptop<small>USB‑C → dock → HDMI 1</small></div>
 <div class="node media">Apple TV<small>HDMI 2</small></div>
-</div>
+</div></div>
+<div class="swipe">Swipe for all 3 →</div>
 <div class="node accent">LG 32GX850A-B<small>Select the source with the monitor's input button</small></div>
 </div>
 <div class="note" style="margin-top:12px">No HDMI switch. Routing this panel through a 4K-at-60-Hz switch would have cost 105&nbsp;Hz of refresh and probably G-Sync, to solve a problem the monitor's three inputs already solve.</div>
@@ -294,15 +306,17 @@ a.product-link.image-link:hover img{opacity:.88}
 <div class="card"><h2>USB control</h2>
 <div class="tree">
 <div class="fc-label" style="padding-top:0">Either computer can own the peripherals</div>
-<div class="fan in" style="--n:2">
+<div class="fan-wrap" tabindex="0"><div class="fan in" style="--n:2">
 <div class="node">HP OMEN<small>USB-A to the switch</small></div>
 <div class="node">Anker Nano Dock<small>10&nbsp;Gbps USB-C port to the switch</small></div>
-</div>
+</div></div>
+<div class="swipe">Swipe for all 2 →</div>
 <div class="node accent">UGREEN USB Switch<small>One button moves everything below</small></div>
-<div class="fan" style="--n:2">
+<div class="fan-wrap" tabindex="0"><div class="fan" style="--n:2">
 <div class="node">Keyboard + mouse<small>2.4&nbsp;GHz dongle</small></div>
 <div class="node">Monitor USB hub<small>Adds two reachable USB-A ports</small></div>
-</div>
+</div></div>
+<div class="swipe">Swipe for all 2 →</div>
 </div>
 <div class="note" style="margin-top:12px">This chain is fully independent of video. Switching the monitor's input does not move the keyboard, and switching USB does not change what is on screen. Two deliberate actions, not one.</div>
 </div>
@@ -312,12 +326,13 @@ a.product-link.image-link:hover img{opacity:.88}
 <div class="node power">Wall AC<small>One cord — the only thing to unplug</small></div>
 <div class="link"></div>
 <div class="node power">8-Outlet Mountable Strip<small>Stationary lower column · 14 AWG · ~770&nbsp;W peak</small></div>
-<div class="fan" style="--n:4">
+<div class="fan-wrap" tabindex="0"><div class="fan" style="--n:4">
 <div class="col"><div class="grp">Desktop</div><div class="node">HP OMEN<small>RTX 4070 tower</small></div><div class="node">LG Monitor</div></div>
 <div class="col"><div class="grp">Laptop</div><div class="node">Anker Dock<small>140&nbsp;W brick</small></div></div>
 <div class="col"><div class="grp">Network</div><div class="node">TL-WR3002X</div><div class="node">TL-SG105</div></div>
 <div class="col"><div class="grp">Other</div><div class="node media">Apple TV 4K</div><div class="node">Lift motor<small>Moves with the cart</small></div></div>
-</div>
+</div></div>
+<div class="swipe">Swipe for all 4 →</div>
 </div>
 <div class="note" style="margin-top:12px">Seven loads, one strip, one cord. No UPS — it would have taken $200 of a $1,000 budget and added about 20&nbsp;lb to a cart that gets moved daily. The accepted trade is that a power cut drops the desktop uncleanly.</div>
 </div>
