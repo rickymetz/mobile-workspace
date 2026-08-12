@@ -77,9 +77,12 @@ tfoot td{font-weight:800;border-top:2px solid var(--line);border-bottom:0}
 /* break-word, not anywhere: anywhere splits product names mid-token. */
 .node{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px 9px;text-align:center;box-shadow:0 3px 10px rgba(20,24,32,.05);font-weight:750;font-size:13px;line-height:1.3;min-width:0;overflow-wrap:break-word}
 .node small{display:block;color:var(--muted);font-weight:500;margin-top:3px;font-size:11.5px;line-height:1.35}
-.node.accent{border-color:#9cc2ff;background:#f4f8ff}
-.node.power{border-color:#e5b75b;background:#fff9eb}
-.node.media{border-color:#c7b7ff;background:#faf8ff}
+/* Fill answers "do I own it?"; a heavier border marks the shared resource. */
+.node.own{border-color:#93cfae;background:#f0faf5}
+.node.buy{border-color:#9cc2ff;background:#f4f8ff}
+.node.ext{border-color:#e5b75b;background:#fff9eb}
+.node.hub{border-width:2px;box-shadow:0 4px 14px rgba(20,24,32,.12)}
+.node,.swatch{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .link{height:18px;width:2px;background:var(--conn);margin:0 auto;flex:0 0 auto}
 .link.stub{display:none;height:13px}
 /* Dashed means wireless, solid means a physical cable. */
@@ -107,9 +110,10 @@ tfoot td{font-weight:800;border-top:2px solid var(--line);border-bottom:0}
 .diagram-key{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:12px;font-size:11px;color:var(--muted)}
 .diagram-key span{display:inline-flex;align-items:center;gap:5px}
 .swatch{width:11px;height:11px;border-radius:3px;border:1px solid var(--line);display:inline-block}
-.swatch.accent{border-color:#9cc2ff;background:#f4f8ff}
-.swatch.power{border-color:#e5b75b;background:#fff9eb}
-.swatch.media{border-color:#c7b7ff;background:#faf8ff}
+.swatch.own{border-color:#93cfae;background:#f0faf5}
+.swatch.buy{border-color:#9cc2ff;background:#f4f8ff}
+.swatch.ext{border-color:#e5b75b;background:#fff9eb}
+.swatch.hub{border-color:#8b93a1;border-width:2px;background:#fff}
 .diagram-key i.dash,.diagram-key i.solid{width:16px;height:0;display:inline-block}
 .diagram-key i.dash{border-top:2px dashed var(--conn)}
 .diagram-key i.solid{border-top:2px solid var(--conn)}
@@ -322,24 +326,25 @@ a.product-link.image-link:hover img{opacity:.88}
 <section class="grid even" id="architecture">
 <div class="card"><h2>Network architecture</h2>
 <div class="tree" role="img" aria-label="The house Wi-Fi router connects wirelessly to the TL-WR3002X travel router in bridge mode, which connects by cable to the TL-SG105 switch. The switch feeds three wired clients: the HP OMEN on port 1, the Apple TV on port 2, and the Anker Nano dock on port 3. The guest laptop reaches the network through the dock’s USB-C cable. Every connection is listed in the wiring table below.">
-<div class="node accent">House Wi‑Fi<small>Router and DHCP live here</small></div>
+<div class="node ext">House Wi‑Fi<small>Router and DHCP live here</small></div>
 <div class="link wifi"><span>Wi‑Fi uplink</span></div>
-<div class="node accent">TL-WR3002X<small>Client/Bridge mode — no NAT</small></div>
+<div class="node buy">TL-WR3002X<small>Client/Bridge mode — no NAT</small></div>
 <div class="link"></div>
-<div class="node">TL-SG105<small>5-port gigabit cart switch</small></div>
+<div class="node buy hub">TL-SG105<small>5-port gigabit cart switch</small></div>
 <div class="link stub"></div>
 <div class="fan-wrap" tabindex="0"><div class="fan" style="--n:3">
-<div class="node">HP OMEN<small>Cat6 to port 1</small></div>
-<div class="node media">Apple TV<small>Cat6 to port 2 · AirPlay reachable from the house</small></div>
+<div class="node own">HP OMEN<small>Cat6 to port 1</small></div>
+<div class="node own">Apple TV<small>Cat6 to port 2 · AirPlay reachable from the house</small></div>
 <div class="col">
-<div class="node">Anker Nano Dock<small>Cat6 to port 3</small></div>
+<div class="node buy">Anker Nano Dock<small>Cat6 to port 3</small></div>
 <div class="link"></div>
-<div class="node accent">Guest Laptop<small>Network arrives over the dock's USB‑C cable</small></div>
+<div class="node own">Guest Laptop<small>Network arrives over the dock's USB‑C cable</small></div>
 </div>
 </div></div>
 <div class="swipe">3 items — swipe or use arrow keys</div>
 </div>
-<div class="diagram-key"><span><i class="swatch accent"></i>Network</span><span><i class="swatch media"></i>Media</span><span><i class="dash"></i>Wireless</span><span><i class="solid"></i>Cable</span></div>
+
+<div class="diagram-key"><span><i class="swatch own"></i>Own it</span><span><i class="swatch buy"></i>To buy</span><span><i class="swatch ext"></i>External</span><span><i class="swatch hub"></i>Shared resource</span><span><i class="dash"></i>Wireless</span><span><i class="solid"></i>Cable</span></div>
 <div class="warn" style="margin-top:12px">Bridge mode is what makes AirPlay work. In Router mode the cart sits behind NAT, and mDNS discovery does not cross NAT — no phone in the house would find the Apple TV.</div>
 </div>
 
@@ -348,14 +353,15 @@ a.product-link.image-link:hover img{opacity:.88}
 <div class="fc-label" style="padding-top:0">Three sources, three native monitor inputs</div>
 <div class="swipe">3 items — swipe or use arrow keys</div>
 <div class="fan-wrap" tabindex="0"><div class="fan in" style="--n:3">
-<div class="node">HP OMEN<small>DisplayPort 1.4 · 4K at 165&nbsp;Hz</small></div>
-<div class="node">Guest Laptop<small>USB‑C → dock → HDMI 1</small></div>
-<div class="node media">Apple TV<small>HDMI 2</small></div>
+<div class="node own">HP OMEN<small>DisplayPort 1.4 · 4K at 165&nbsp;Hz</small></div>
+<div class="node own">Guest Laptop<small>USB‑C → dock → HDMI 1</small></div>
+<div class="node own">Apple TV<small>HDMI 2</small></div>
 </div></div>
 <div class="link stub"></div>
 
-<div class="node accent">LG 32GX850A-B<small>Select the source with the monitor's input button</small></div>
+<div class="node own hub">LG 32GX850A-B<small>Select the source with the monitor's input button</small></div>
 </div>
+<div class="diagram-key"><span><i class="swatch own"></i>Own it</span><span><i class="swatch hub"></i>Shared resource</span></div>
 <div class="note" style="margin-top:12px">No HDMI switch. Routing this panel through a 4K-at-60-Hz switch would have cost 105&nbsp;Hz of refresh and probably G-Sync, to solve a problem the monitor's three inputs already solve.</div>
 </div>
 </section>
@@ -366,19 +372,20 @@ a.product-link.image-link:hover img{opacity:.88}
 <div class="fc-label" style="padding-top:0">Either computer can own the peripherals</div>
 <div class="swipe">2 items — swipe or use arrow keys</div>
 <div class="fan-wrap" tabindex="0"><div class="fan in" style="--n:2">
-<div class="node">HP OMEN<small>USB-A to the switch</small></div>
-<div class="node">Anker Nano Dock<small>USB-C port to the switch · 5&nbsp;Gbps link</small></div>
+<div class="node own">HP OMEN<small>USB-A to the switch</small></div>
+<div class="node buy">Anker Nano Dock<small>USB-C port to the switch · 5&nbsp;Gbps link</small></div>
 </div></div>
 <div class="link stub"></div>
 
-<div class="node accent">UGREEN USB Switch<small>One button moves everything below</small></div>
+<div class="node buy hub">UGREEN USB Switch<small>One button moves everything below</small></div>
 <div class="link stub"></div>
 <div class="fan-wrap" tabindex="0"><div class="fan" style="--n:2">
-<div class="node">Keyboard + mouse<small>2.4&nbsp;GHz dongle</small></div>
-<div class="node">Monitor USB hub<small>Adds two reachable USB-A ports</small></div>
+<div class="node own">Keyboard + mouse<small>2.4&nbsp;GHz dongle</small></div>
+<div class="node own">Monitor USB hub<small>Adds two reachable USB-A ports</small></div>
 </div></div>
 <div class="swipe">2 items — swipe or use arrow keys</div>
 </div>
+<div class="diagram-key"><span><i class="swatch own"></i>Own it</span><span><i class="swatch buy"></i>To buy</span><span><i class="swatch hub"></i>Shared resource</span></div>
 <div class="note" style="margin-top:12px">This chain is fully independent of video. Switching the monitor's input does not move the keyboard, and switching USB does not change what is on screen. Two deliberate actions, not one.</div>
 </div>
 
@@ -412,18 +419,19 @@ a.product-link.image-link:hover img{opacity:.88}
 <section style="margin-top:18px">
 <div class="card"><h2>Power architecture</h2>
 <div class="tree" role="img" aria-label="A single wall cord feeds an eight-outlet strip on the cart’s stationary lower column. The strip powers seven loads in four groups: desktop, being the HP OMEN and the LG monitor; laptop, being the Anker dock; network, being the TL-WR3002X and TL-SG105; and other, being the Apple TV and the cart lift motor.">
-<div class="node power">Wall AC<small>One cord — the only thing to unplug</small></div>
+<div class="node ext">Wall AC<small>One cord — the only thing to unplug</small></div>
 <div class="link"></div>
-<div class="node power">8-Outlet Mountable Strip<small>Stationary lower column · 14 AWG · ~770&nbsp;W peak</small></div>
+<div class="node buy hub">8-Outlet Mountable Strip<small>Stationary lower column · 14 AWG · ~770&nbsp;W peak</small></div>
 <div class="link stub"></div>
 <div class="fan-wrap" tabindex="0"><div class="fan" style="--n:4">
-<div class="col"><div class="grp">Desktop</div><div class="node">HP OMEN<small>RTX 4070 tower</small></div><div class="node">LG Monitor</div></div>
-<div class="col"><div class="grp">Laptop</div><div class="node">Anker Dock<small>140&nbsp;W brick</small></div></div>
-<div class="col"><div class="grp">Network</div><div class="node">TL-WR3002X</div><div class="node">TL-SG105</div></div>
-<div class="col"><div class="grp">Other</div><div class="node media">Apple TV 4K</div><div class="node">Lift motor<small>Moves with the cart</small></div></div>
+<div class="col"><div class="grp">Desktop</div><div class="node own">HP OMEN<small>RTX 4070 tower</small></div><div class="node own">LG Monitor</div></div>
+<div class="col"><div class="grp">Laptop</div><div class="node buy">Anker Dock<small>140&nbsp;W brick</small></div></div>
+<div class="col"><div class="grp">Network</div><div class="node buy">TL-WR3002X</div><div class="node buy">TL-SG105</div></div>
+<div class="col"><div class="grp">Other</div><div class="node own">Apple TV 4K</div><div class="node buy">Lift motor<small>Moves with the cart</small></div></div>
 </div></div>
 <div class="swipe">4 groups, 7 devices — swipe or use arrow keys</div>
 </div>
+<div class="diagram-key"><span><i class="swatch own"></i>Own it</span><span><i class="swatch buy"></i>To buy</span><span><i class="swatch ext"></i>External</span><span><i class="swatch hub"></i>Shared resource</span></div>
 <div class="note" style="margin-top:12px">Seven loads, one strip, one cord. No UPS — it would have taken $200 of a $1,000 budget and added about 20&nbsp;lb to a cart that gets moved daily. The accepted trade is that a power cut drops the desktop uncleanly.</div>
 </div>
 </section>
